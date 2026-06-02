@@ -1,1 +1,1 @@
-export { default } from '@diaexpress/shared/pages/TrackShipment';
+export { default } from '../src/shared/pages/TrackShipment';

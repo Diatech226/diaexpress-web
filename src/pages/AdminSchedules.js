@@ -1,1 +1,1 @@
-export { default } from '@diaexpress/shared/pages/AdminSchedules';
+export { default } from '../src/shared/pages/AdminSchedules';

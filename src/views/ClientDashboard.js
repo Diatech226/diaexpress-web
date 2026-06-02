@@ -1,1 +1,1 @@
-export { default } from '@diaexpress/shared/views/ClientDashboard';
+export { default } from '../src/shared/views/ClientDashboard';

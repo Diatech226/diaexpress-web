@@ -1,1 +1,1 @@
-export { default } from '@diaexpress/shared/pages/PublicDashboard';
+export { default } from '../src/shared/pages/PublicDashboard';

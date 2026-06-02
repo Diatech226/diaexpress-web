@@ -1,1 +1,1 @@
-export { default } from '@diaexpress/shared/views/AdminQuotes';
+export { default } from '../src/shared/views/AdminQuotes';

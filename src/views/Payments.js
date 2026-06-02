@@ -1,1 +1,1 @@
-export { default } from '@diaexpress/shared/views/Payments';
+export { default } from '../src/shared/views/Payments';

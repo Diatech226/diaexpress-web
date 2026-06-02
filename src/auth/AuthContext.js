@@ -1,1 +1,1 @@
-export { AuthProvider, useAuthUser } from '@diaexpress/shared/auth/AuthContext';
+export { AuthProvider, useAuthUser } from '../src/shared/auth/AuthContext';

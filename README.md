@@ -67,7 +67,7 @@ pnpm --filter diaexpress-web dev
 
 ## How to split into separate repos
 1. Copier le dossier `apps/diaexpress-web` dans un nouveau repo.
-2. Conserver `packages/diaexpress-shared` (workspace ou vendored) pour conserver les imports `@diaexpress/shared`.
+2. Conserver `packages/diaexpress-shared` (workspace ou vendored) pour conserver les imports `../src/shared`.
 3. Ajouter votre `.env` à partir de `.env.example`.
 4. Mettre à jour la CI/CD pour utiliser ce dossier comme racine du projet.
 

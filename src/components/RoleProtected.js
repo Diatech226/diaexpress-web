@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSafeUser } from '@diaexpress/shared/auth/useSafeClerk';
+import { useSafeUser } from '../src/shared/auth/useSafeClerk';
 
 const RoleProtected = ({ role, children }) => {
   const { user } = useSafeUser();
