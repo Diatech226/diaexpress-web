@@ -19,7 +19,7 @@ const Shipments = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
 
-  const loadShipments = useCallback(async () => {
+  const loadShipments = async () => {
     setLoading(true);
     setError(null);
     try {

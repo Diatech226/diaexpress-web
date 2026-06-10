@@ -3,7 +3,7 @@ import { useBackendAuth } from '../auth/useBackendAuth';
 import { fetchAddresses, createAddress, updateAddress, deleteAddress } from '../api/addresses';
 import { normaliseCountry, validateCountry, validatePhone } from '../utils/addressValidation';
 import '../styles/ProfileAddresses.css';
-d'adresse
+
 const createBlankGpsLocation = () => ({
   latitude: '',
   longitude: '',
@@ -262,7 +262,7 @@ const ProfileAddresses = () => {
     <div className="profile-addresses">
       <header>
         <h1>📍 Mes adresses sauvegardées</h1>
-        <p>Gère ici tes adresses d&apos;expéditeur, destinataire et facturation pour les réutiliser rapidement.</p>
+        <p>Gère ici tes adresses d'expéditeur, destinataire et facturation pour les réutiliser rapidement.</p>
       </header>
 
       {error && <div className="alert error">{error}</div>}
@@ -317,7 +317,7 @@ const ProfileAddresses = () => {
         <form onSubmit={handleSubmit} className="address-form">
           <div className="form-row">
             <label>
-              Type d&apos;adresse
+              Type d'adresse
               <select name="type" value={form.type} onChange={handleChange} required>
                 <option value="sender">Expéditeur</option>
                 <option value="recipient">Destinataire</option>
@@ -439,7 +439,7 @@ const ProfileAddresses = () => {
               </label>
             </div>
             <p className="geo-hint">
-              Ces données resteront optionnelles et prépareront l&apos;arrivée des services de géolocalisation.
+              Ces données resteront optionnelles et prépareront l'arrivée des services de géolocalisation.
             </p>
           </div>
 

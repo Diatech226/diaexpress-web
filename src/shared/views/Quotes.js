@@ -1,4 +1,4 @@
-import React, { useEffect,useCallback , useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useBackendAuth } from '../auth/useBackendAuth';
 import { buildApiUrl } from "../api/api";
 import PaymentDialog from "../components/payments/PaymentDialog";
@@ -14,8 +14,7 @@ const Quotes = () => {
   const [paymentError, setPaymentError] = useState(null);
   const [paymentReceipt, setPaymentReceipt] = useState(null);
 
-  const loadQuotes =  useCallback(async () => {
-
+  const loadQuotes = async () => {
     setLoading(true);
     try {
       const token = await getToken();
@@ -29,11 +28,11 @@ const Quotes = () => {
       setError(err.message);
     }
     setLoading(false);
-  });
+  };
 
   useEffect(() => {
     loadQuotes();
-  }, [loadQuotes]);
+  }, []);
 
   const handlePayment = (quote) => {
     setSelectedQuote(quote);
