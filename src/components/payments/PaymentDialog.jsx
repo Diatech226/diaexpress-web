@@ -1,1 +1,1 @@
-export { default } from '../src/shared/components/payments/PaymentDialog';
+export { default } from '@diaexpress/shared/components/payments/PaymentDialog';

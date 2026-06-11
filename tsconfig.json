@@ -22,6 +22,12 @@
     "paths": {
       "@/*": [
         "src/*"
+      ],
+      "@diaexpress/shared": [
+        "../../packages/diaexpress-shared/src/index.js"
+      ],
+      "@diaexpress/shared/*": [
+        "../../packages/diaexpress-shared/src/*"
       ]
     }
   },

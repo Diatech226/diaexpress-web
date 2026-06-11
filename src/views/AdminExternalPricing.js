@@ -1,1 +1,1 @@
-export { default } from '../src/shared/views/AdminExternalPricing';
+export { default } from '@diaexpress/shared/views/AdminExternalPricing';

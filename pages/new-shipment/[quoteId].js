@@ -1,5 +1,5 @@
 import React from 'react';
-import NewShipmentPage from '../src/shared/pages/NewShipmentPage';
+import NewShipmentPage from '@diaexpress/shared/pages/NewShipmentPage';
 
 const NewShipmentRoute = () => {
   return <NewShipmentPage />;

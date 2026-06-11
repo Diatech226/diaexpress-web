@@ -33,7 +33,7 @@ const nextConfig = {
   output: 'standalone',
   reactStrictMode: true,
   swcMinify: true,
-
+  transpilePackages: ['@diaexpress/shared'],
   webpack: (config) => {
     config.resolve = config.resolve || {};
     config.resolve.alias = {

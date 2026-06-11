@@ -1,1 +1,1 @@
-export * from '../src/shared/api/api';
+export * from '@diaexpress/shared/api/api';

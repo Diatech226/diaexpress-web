@@ -1,1 +1,1 @@
-export { default } from '../src/shared/views/AdminPackageType';
+export { default } from '@diaexpress/shared/views/AdminPackageType';

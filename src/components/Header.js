@@ -1,7 +1,7 @@
 // 📁 src/components/Header.js
 import React from "react";
 import { SignInButton, UserButton } from "@clerk/nextjs";
-import { useSafeClerk, useSafeUser } from "../src/shared/auth/useSafeClerk";
+import { useSafeClerk, useSafeUser } from "@diaexpress/shared/auth/useSafeClerk";
 import Link from "next/link";
 
 const Header = () => {

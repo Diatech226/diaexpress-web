@@ -1,4 +1,4 @@
-declare module '../src/shared/auth/useSafeClerk' {
+declare module '@diaexpress/shared/auth/useSafeClerk' {
   export interface SafeClerkAuth {
     isLoaded: boolean;
     isSignedIn: boolean;
