@@ -3,11 +3,12 @@ import { useRouter } from 'next/router';
 import {
   SHIPMENT_STATUS_FLOW,
   formatStatusComment,
-  getStatusBadgeClass,
   getStatusIndex,
-  SHIPMENT_STATUS_MAP,
+  formatShipmentStatus,
+  normalizeShipmentStatus,
 } from '../constants/shipmentStatus';
 import { trackShipment } from '../api/shipments';
+import { ProgressStepper, TimelineStatus, StatusBadge, TransportBadge } from '../design-system/StatusBadges';
 
 const TrackShipment = () => {
   const router = useRouter();
@@ -21,23 +22,33 @@ const TrackShipment = () => {
   const handleSearch = useCallback(
     async (code) => {
       const codeToSearch = (code ?? trackingCode).trim();
-      if (!codeToSearch) return;
+      if (!codeToSearch) {
+        setError('Vérifiez votre code de suivi : il est nécessaire pour afficher votre colis.');
+        return;
+      }
 
       try {
         setIsLoading(true);
         const data = await trackShipment(codeToSearch);
-        const mergedShipment = data?.shipment
+        const source = data?.shipment || data;
+        const events = source?.statusHistory || source?.timeline || source?.trackingUpdates || data?.events || data?.statusHistory || [];
+        const mergedShipment = source?.trackingCode || data?.trackingCode
           ? {
-              ...data.shipment,
-              statusHistory:
-                data.shipment.statusHistory || data.statusHistory || [],
+              ...source,
+              trackingCode: source.trackingCode || data.trackingCode,
+              status: normalizeShipmentStatus(source.status || data.status),
+              statusHistory: events.map((event) => ({
+                ...event,
+                status: normalizeShipmentStatus(event.status || source.status || data.status),
+                comment: event.comment || event.note,
+              })),
             }
           : null;
         setShipment(mergedShipment);
         setError('');
       } catch (err) {
         setShipment(null);
-        setError(err.message || 'Erreur');
+        setError(err.message || 'Vérifiez votre code de suivi. Aucun résultat public disponible pour le moment.');
       } finally {
         setIsLoading(false);
       }
@@ -85,41 +96,35 @@ const TrackShipment = () => {
 
   return (
     <div className="track-shipment-page">
-      <h2>🔍 Suivi de colis</h2>
+      <h2>Suivre mon colis</h2>
       <div className="track-form">
         <input
           type="text"
-          placeholder="Entrez le code de tracking"
+          placeholder="Ex. DX-2026-000123" aria-label="Code de suivi"
           value={trackingCode}
           onChange={(e) => setTrackingCode(e.target.value)}
         />
         <button onClick={handleSearch} disabled={isLoading}>
-          {isLoading ? 'Recherche…' : 'Rechercher'}
+          {isLoading ? 'Recherche…' : 'Suivre mon colis'}
         </button>
       </div>
 
+      {!shipment && !isLoading && !error && <p className="empty-history">Entrez un code de tracking pour afficher le statut public sans données sensibles.</p>}
+      {isLoading && <p className="empty-history">Recherche du tracking en cours…</p>}
       {error && <p className="error">{error}</p>}
 
       {shipment && (
         <div className="shipment-info">
           <h3>Détails de l&apos;envoi :</h3>
-          <p><strong>Produit :</strong> {shipment.quoteId?.productType || '—'}</p>
-          <p><strong>Origine :</strong> {shipment.quoteId?.origin || '—'}</p>
-          <p><strong>Destination :</strong> {shipment.quoteId?.destination || '—'}</p>
-          <p><strong>Transport :</strong> {shipment.quoteId?.transportType || '—'}</p>
-          <p><strong>Statut actuel :</strong> {shipment.status}</p>
+          <p><strong>Tracking :</strong> {shipment.trackingCode || trackingCode}</p>
+          <p><strong>Origine :</strong> {shipment.origin || shipment.meta?.quote?.origin || shipment.quoteId?.origin || '—'}</p>
+          <p><strong>Destination :</strong> {shipment.destination || shipment.meta?.quote?.destination || shipment.quoteId?.destination || '—'}</p>
+          <p><strong>Transport :</strong> <TransportBadge transport={shipment.quoteId?.transportType || shipment.transportType || shipment.carrier || shipment.provider} /></p>
+          <p><strong>Statut actuel :</strong> <StatusBadge status={shipment.status} label={formatShipmentStatus(shipment.status)} /></p>
 
-          <div className="progress-bar">
-            {SHIPMENT_STATUS_FLOW.map((step, index) => (
-              <div
-                key={index}
-                className={`progress-step ${
-                  index <= currentStepIndex && currentStepIndex !== -1 ? 'active' : ''
-                }`}
-              >
-                {step.label}
-              </div>
-            ))}
+          <ProgressStepper flow={SHIPMENT_STATUS_FLOW} currentIndex={currentStepIndex} />
+          <div className="logistic-map-placeholder" role="img" aria-label="Carte logistique simplifiée">
+            <span>Origine</span><strong>→</strong><span>Hub DiaExpress</span><strong>→</strong><span>Destination</span>
           </div>
 
           <div className="status-history">
@@ -129,28 +134,8 @@ const TrackShipment = () => {
             ) : (
               <ul>
                 {statusHistory.map((entry, idx) => {
-                  const meta = SHIPMENT_STATUS_MAP[entry.status] || {
-                    label: entry.status,
-                    badgeClass: 'bg-gray-100 text-gray-700',
-                  };
-
                   return (
-                    <li key={`${entry.status}-${entry.timestamp || idx}`}>
-                      <div className="history-item">
-                        <div className="history-marker" />
-                        <div className="history-content">
-                          <div className="history-header">
-                            <span className={`history-status ${getStatusBadgeClass(entry.status)}`}>
-                              {meta.label}
-                            </span>
-                            <span className="history-date">{renderTimestamp(entry.timestamp)}</span>
-                          </div>
-                          <p className="history-comment">
-                            {entry.comment || formatStatusComment(entry.status)}
-                          </p>
-                        </div>
-                      </div>
-                    </li>
+                    <TimelineStatus key={`${entry.status}-${entry.timestamp || idx}`} status={entry.status} date={renderTimestamp(entry.timestamp)} comment={entry.comment || formatStatusComment(entry.status)} />
                   );
                 })}
               </ul>
